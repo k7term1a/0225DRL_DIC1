@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kai chi | Personal Page</title>
+    <meta
+      name="description"
+      content="kai chi 的個人首頁，包含即時時間、技能與專案展示。"
+    >
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+
+    <main class="container">
+      <header class="glass-card hero" id="heroCard">
+        <p class="label">WELCOME</p>
+        <h1 id="greeting">Hello, kai chi</h1>
+        <p class="subtitle">
+          這是我的 GitHub 個人網頁，持續更新我的學習軌跡與作品。
+        </p>
+
+        <div class="time-panel" aria-live="polite">
+          <span class="time-label">目前時間</span>
+          <span class="time-value" id="currentTime">--:--:--</span>
+          <span class="date-value" id="currentDate">----/--/--</span>
+        </div>
+      </header>
+
+      <section class="grid" aria-label="Professional Sections">
+        <h2 class="sr-only">Professional Sections</h2>
+        <article class="glass-card section-card" id="about">
+          <h2>About</h2>
+          <p>
+            我是 kai chi，關注 Web 開發、互動體驗與前端架構。喜歡把複雜概念做成清楚、可維護且美觀的產品。
+          </p>
+        </article>
+
+        <article class="glass-card section-card" id="skills">
+          <h2>Skills</h2>
+          <ul class="tag-list">
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>JavaScript</li>
+            <li>Git / GitHub</li>
+            <li>Responsive UI</li>
+          </ul>
+        </article>
+
+        <article class="glass-card section-card" id="projects">
+          <h2>Projects</h2>
+          <ul class="project-list">
+            <li>
+              <strong>Personal Portfolio</strong>
+              <span>打造可快速擴充的個人展示頁。</span>
+            </li>
+            <li>
+              <strong>UI Experiments</strong>
+              <span>探索 Glassmorphism 與微互動設計。</span>
+            </li>
+            <li>
+              <strong>Learning Notes</strong>
+              <span>整理前端與程式設計學習紀錄。</span>
+            </li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      const greetingEl = document.getElementById("greeting");
+      const timeEl = document.getElementById("currentTime");
+      const dateEl = document.getElementById("currentDate");
+      const heroCard = document.getElementById("heroCard");
+      const userName = "kai chi";
+
+      function setGreeting(hours) {
+        if (hours < 12) {
+          greetingEl.textContent = `早安，${userName}`;
+        } else if (hours < 18) {
+          greetingEl.textContent = `午安，${userName}`;
+        } else {
+          greetingEl.textContent = `晚安，${userName}`;
+        }
+      }
+
+      function updateClock() {
+        const now = new Date();
+        setGreeting(now.getHours());
+
+        timeEl.textContent = now.toLocaleTimeString("zh-TW", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+
+        dateEl.textContent = now.toLocaleDateString("zh-TW", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          weekday: "short",
+        });
+      }
+
+      function addInteraction() {
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        if (prefersReducedMotion) return;
+
+        heroCard.addEventListener("mousemove", (event) => {
+          const rect = heroCard.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          const rotateX = ((y / rect.height) - 0.5) * -5;
+          const rotateY = ((x / rect.width) - 0.5) * 5;
+          heroCard.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        heroCard.addEventListener("mouseleave", () => {
+          heroCard.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
+        });
+      }
+
+      updateClock();
+      addInteraction();
+      setInterval(updateClock, 1000);
+    </script>
+  </body>
+</html>
